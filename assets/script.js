@@ -24,6 +24,7 @@ document
     weatherContainer.style.display = "none";
 
     const resultContainer = document.getElementById("resultContainer");
+    resultContainer.classList.add("white-background");
     resultContainer.style.display = "none";
 
     // Weather API key and URL
@@ -80,6 +81,7 @@ document
         `;
 
         const weatherContainer = document.getElementById("weatherContainer");
+        weatherContainer.classList.add("weather-color");
         weatherContainer.innerHTML = weatherHtml; // Display weather information
 
         // Save weather data in the search data object
@@ -140,6 +142,7 @@ document
         result.restaurants.forEach((restaurant) => {
           const restaurantName = restaurant.restaurant.name;
           const restaurantThumb = restaurant.restaurant.thumb;
+          const restaurantAddress = restaurant.restaurant.location.address;
 
           // Create card element
           const cardElement = document.createElement("div");
@@ -152,17 +155,18 @@ document
             "text-black"
           );
 
-          // Create elements for restaurant name and picture
+          // Create elements for restaurant name, picture, and address
           const nameElement = document.createElement("h3");
           const pictureElement = document.createElement("img");
+          const addressElement = document.createElement("p");
 
           // Set text content for name element
           nameElement.textContent = restaurantName;
 
           // Set attributes for picture element
           if (restaurantThumb.includes("res_avatar_476_320_1x_new.png")) {
-            // Replace the image URL with the different picture
-            pictureElement.src = "./assets/No-image.jpg";
+            // Replace the image URL with a different picture
+            pictureElement.src = "./assets/images/No-image.jpg";
           } else {
             pictureElement.src = restaurantThumb;
           }
@@ -170,9 +174,25 @@ document
           pictureElement.alt = restaurantName;
           pictureElement.classList.add("rounded-lg", "w-full");
 
-          // Append name and picture elements to card element
+          // Set text content and styling for address element
+          addressElement.textContent = restaurantAddress;
+          addressElement.classList.add(
+            "text-sm",
+            "cursor-pointer",
+            "text-black"
+          );
+
+          // Add event listener for the clickable address
+          addressElement.addEventListener("click", function () {
+            const address = encodeURIComponent(restaurantAddress);
+            const url = `https://www.google.com/maps/search/?api=1&query=${address}`;
+            window.open(url, "_blank"); // Open the URL in a new tab
+          });
+
+          // Append name, picture, and address elements to card element
           cardElement.appendChild(nameElement);
           cardElement.appendChild(pictureElement);
+          cardElement.appendChild(addressElement);
 
           // Append card element to card container
           cardContainer.appendChild(cardElement);
